@@ -80,6 +80,7 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
     private static final String KEY_DEVICE_MODEL = "device_model";
     private static final String KEY_DEVICE_NAME = "device_name";
     private static final String KEY_SELINUX_STATUS = "selinux_status";
+    private static final String KEY_PAX_STATUS = "pax_status";
     private static final String KEY_BASEBAND_VERSION = "baseband_version";
     private static final String KEY_FIRMWARE_VERSION = "firmware_version";
     private static final String KEY_UPDATE_SETTING = "additional_system_update_settings";
@@ -135,6 +136,25 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
         // Remove selinux information if property is not present
         removePreferenceIfPropertyMissing(getPreferenceScreen(), KEY_SELINUX_STATUS,
                 PROPERTY_SELINUX_STATUS);
+
+        boolean pax_available = false;
+        try (FileReader fr = new FileReader("/proc/self/status")) {
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("PaX:")) {
+                    pax_available = true;
+                    if (line.contains("P") && line.contains("M") && line.contains("R")) {
+                        String status = getResources().getString(R.string.pax_status_active);
+                        setStringSummary(KEY_PAX_STATUS, status);
+                    }
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "failed to read /proc/self/status", e);
+        }
+        removePreferenceIfBoolFalse(KEY_PAX_STATUS, pax_available);
 
         // Only the owner should see the Updater settings, if it exists
         if (UserHandle.myUserId() == UserHandle.USER_OWNER) {

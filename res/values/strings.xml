@@ -2162,6 +2162,8 @@
     <string name="build_number">Build number</string>
     <!-- About phone screen,  setting option name  [CHAR LIMIT=40] -->
     <string name="selinux_status">SELinux status</string>
+    <!-- About phone screen,  setting option name  [CHAR LIMIT=40] -->
+    <string name="pax_status">PaX status</string>
 
     <!-- About phone screen, show when a value of some status item is unavailable. -->
     <string name="device_info_not_available">Not available</string>
@@ -5193,6 +5195,9 @@
     <string name="selinux_status_disabled">Disabled</string>
     <string name="selinux_status_permissive">Permissive</string>
     <string name="selinux_status_enforcing">Enforcing</string>
+
+    <string name="pax_status_active">Active</string>
+    <string name="pax_status_inactive">Inactive</string>
 
     <!-- Notification of installed CA Certs --> <skip/>
 
